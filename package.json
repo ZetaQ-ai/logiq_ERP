@@ -13,6 +13,8 @@
     "lint": "turbo run lint",
     "lint:deps": "turbo run lint:deps",
     "typecheck": "turbo run typecheck",
+    "db:generate": "npm run db:generate -w @erp/api",
+    "db:migrate": "npm run db:migrate -w @erp/api",
     "stack:up": "docker compose -f packages/infra/docker-compose.yml up -d",
     "stack:down": "docker compose -f packages/infra/docker-compose.yml down"
   },
