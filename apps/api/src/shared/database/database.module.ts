@@ -1,4 +1,4 @@
-import { Global, Inject, Module } from '@nestjs/common';
+import { Global, Inject, Logger, Module } from '@nestjs/common';
 import type { OnApplicationShutdown } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/node-postgres';
@@ -17,7 +17,12 @@ export type Tx = Parameters<Parameters<Db['transaction']>[0]>[0];
       useFactory: async (): Promise<Db> => {
         const url = process.env.DATABASE_URL;
         if (!url) throw new Error('DATABASE_URL is not set');
-        const db = drizzle(new pg.Pool({ connectionString: url }), { casing: 'snake_case' });
+        // Fail a query after 5 s without a connection instead of waiting forever (pg's default).
+        const pool = new pg.Pool({ connectionString: url, connectionTimeoutMillis: 5000 });
+        // An idle connection Postgres drops emits 'error'; unhandled, it would crash the process.
+        // The pool discards that connection and opens new ones once Postgres is back.
+        pool.on('error', (error) => new Logger('Database').error(`idle connection lost: ${error.message}`));
+        const db = drizzle(pool, { casing: 'snake_case' });
         await db.execute(sql`select 1`); // fail fast if Postgres is unreachable
         return db;
       },
