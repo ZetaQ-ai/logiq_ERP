@@ -1,5 +1,5 @@
 // Module boundary rules from the backend coding standard, section 4.
-const CONTRACT = '^src/modules/[^/]+/contracts/index\.ts$';
+const CONTRACT = '^src/modules/[^/]+/contracts/index\\.ts$';
 
 /** @type {import('dependency-cruiser').IConfiguration} */
 module.exports = {
@@ -15,7 +15,7 @@ module.exports = {
       name: 'outside-only-via-contracts',
       comment: 'Code outside modules imports only contracts/index.ts (app.module.ts registers modules).',
       severity: 'error',
-      from: { path: '^src/', pathNot: ['^src/modules/', '^src/app\.module\.ts$'] },
+      from: { path: '^src/', pathNot: ['^src/modules/', '^src/app\\.module\\.ts$'] },
       to: { path: '^src/modules/', pathNot: CONTRACT },
     },
     {
@@ -31,6 +31,13 @@ module.exports = {
       severity: 'error',
       from: { path: '^src/shared/' },
       to: { path: '^src/(modules|workflows)/' },
+    },
+    {
+      name: 'command-sender-only-in-workflows',
+      comment: 'CommandSender is reserved for workflows; modules send commands with bus.add (standard 6.1).',
+      severity: 'error',
+      from: { pathNot: ['^src/workflows/', '^src/shared/workflow/'] },
+      to: { path: '^src/shared/workflow/command-sender\\.ts$' },
     },
     {
       name: 'contracts-only-cqrs',
