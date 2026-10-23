@@ -1,0 +1,1 @@
+ALTER TABLE "messaging"."processed" ADD COLUMN "result" jsonb;

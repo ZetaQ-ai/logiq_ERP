@@ -8,6 +8,13 @@
       "when": 1792736811314,
       "tag": "0000_blue_green_goblin",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1792737661933,
+      "tag": "0001_orange_stark_industries",
+      "breakpoints": true
     }
   ]
 }
