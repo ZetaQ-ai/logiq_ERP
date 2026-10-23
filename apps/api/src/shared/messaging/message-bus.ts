@@ -50,6 +50,11 @@ export class MessageBus implements OnModuleInit, OnApplicationShutdown {
     await this.connection.close();
   }
 
+  /** Whether the publisher connection to RabbitMQ is up right now (it reconnects on its own). */
+  isConnected(): boolean {
+    return this.connection.isConnected();
+  }
+
   /** Runs work in a transaction; messages added with bus.add are sent after it commits. */
   async transaction<R>(work: (tx: Tx) => Promise<R>): Promise<R> {
     const outgoing: Envelope<unknown>[] = [];
