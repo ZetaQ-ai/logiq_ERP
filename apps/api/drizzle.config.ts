@@ -13,6 +13,7 @@ export default defineConfig({
   casing: 'snake_case',
   // Add each module's Postgres schema here (coding standard 11.1, step 3).
   // schema.ts must export its pgSchema(...) object, or no CREATE SCHEMA is generated.
+  // Never add nest_workflows: @nestjs/workflows owns it, through the custom migration drizzle/0002_workflows.sql.
   schemaFilter: ['messaging'],
   dbCredentials: { url },
 });
